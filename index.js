@@ -11,7 +11,16 @@ app.use(express.json());
 
 
 
-
+// https://i.ibb.co.com/6sS9c9r/b1.jpg
+// https://i.ibb.co.com/gZqqL8C/b2.jpg
+// https://i.ibb.co.com/Lv5gGct/b3.jpg
+// https://i.ibb.co.com/V3VpD5r/b4.jpg
+// https://i.ibb.co.com/8BBkgWR/b5.webp
+// https://i.ibb.co.com/TPnxh11/b6.jpg
+// https://i.ibb.co.com/Bs4FxBd/b7.jpg
+// https://i.ibb.co.com/FxqQXmz/b8.jpg
+// https://i.ibb.co.com/bB7ZPtF/b9.jpg
+// https://i.ibb.co.com/0BB8nyk/b10.jpg
 
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.i0wokhn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
@@ -25,19 +34,23 @@ const client = new MongoClient(uri, {
 
 async function run() {
     try {
-        // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
-        // Send a ping to confirm a successful connection
+
+        const allBookDB = client.db("bookStoreDB").collection("allBook");
+
         app.get("/", (req, res) => {
-            res.send("Setup is ok hi hello")
+            res.send("Server is running, ok")
+        })
+
+        app.get("/books", async (req, res) => {
+            const data = await allBookDB.find().toArray();
+            res.send(data);
         })
 
 
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
-        // Ensures that the client will close when you finish/error
-        // await client.close();
+
     }
 }
 run().catch(console.dir);
